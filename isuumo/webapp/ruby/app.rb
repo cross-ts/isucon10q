@@ -134,7 +134,7 @@ class App < Sinatra::Base
 
   get '/api/chair/low_priced' do
     sql = "SELECT * FROM chair WHERE stock > 0 ORDER BY price ASC, id ASC LIMIT #{LIMIT}" # XXX:
-    chairs = db.query(sql)
+    chairs = db.query(sql).to_a
     { chairs: chairs }.to_json
   end
 
