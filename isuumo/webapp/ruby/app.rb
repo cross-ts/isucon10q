@@ -134,7 +134,7 @@ class App < Sinatra::Base
 
   get '/api/chair/low_priced' do
     sql = "SELECT * FROM chair WHERE stock > 0 ORDER BY price ASC, id ASC LIMIT #{LIMIT}" # XXX:
-    chairs = db.query(sql).to_a
+    chairs = db.query(sql)
     { chairs: chairs }.to_json
   end
 
@@ -336,7 +336,7 @@ class App < Sinatra::Base
 
   get '/api/estate/low_priced' do
     sql = "SELECT * FROM estate ORDER BY rent ASC, id ASC LIMIT #{LIMIT}" # XXX:
-    estates = db.xquery(sql).to_a.sort! { |e| e[:id] }
+    estates = db.xquery(sql).to_a
     { estates: estates.map { |e| camelize_keys_for_estate(e) } }.to_json
   end
 
@@ -432,7 +432,7 @@ class App < Sinatra::Base
     count_prefix = 'SELECT COUNT(*) as count FROM estate WHERE '
 
     count = db.xquery("#{count_prefix}#{search_condition}", query_params).first[:count]
-    estates = db.xquery("#{sqlprefix}#{search_condition}#{limit_offset}", query_params).to_a.sort! { |e| e[:id] }
+    estates = db.xquery("#{sqlprefix}#{search_condition}#{limit_offset}", query_params)
 
     { count: count, estates: estates.map { |e| camelize_keys_for_estate(e) } }.to_json
   end
@@ -464,7 +464,7 @@ class App < Sinatra::Base
     }
 
     sql = 'SELECT * FROM estate WHERE latitude <= ? AND latitude >= ? AND longitude <= ? AND longitude >= ? ORDER BY popularity DESC, id ASC'
-    estates = db.xquery(sql, bounding_box[:bottom_right][:latitude], bounding_box[:top_left][:latitude], bounding_box[:bottom_right][:longitude], bounding_box[:top_left][:longitude]).sort! { |e| e[:id] }
+    estates = db.xquery(sql, bounding_box[:bottom_right][:latitude], bounding_box[:top_left][:latitude], bounding_box[:bottom_right][:longitude], bounding_box[:top_left][:longitude])
 
     estates_in_polygon = []
     estates.each do |estate|
@@ -565,7 +565,7 @@ class App < Sinatra::Base
     d = chair[:depth]
 
     sql = "SELECT * FROM estate WHERE (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) OR (door_width >= ? AND door_height >= ?) ORDER BY popularity DESC, id ASC LIMIT #{LIMIT}" # XXX:
-    estates = db.xquery(sql, w, h, w, d, h, w, h, d, d, w, d, h).to_a.sort! { |e| e[:id] }
+    estates = db.xquery(sql, w, h, w, d, h, w, h, d, d, w, d, h).to_a
 
     { estates: estates.map { |e| camelize_keys_for_estate(e) } }.to_json
   end
