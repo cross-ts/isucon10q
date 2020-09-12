@@ -129,21 +129,6 @@ class App < Sinatra::Base
       end
     end
 
-    db.xquery("UPDATE chair set rent_range = 0 WHERE rent < 50000")
-    db.xquery("UPDATE chair set rent_range = 1 WHERE rent >= 50000 and rent < 100000")
-    db.xquery("UPDATE chair set rent_range = 2 WHERE rent >= 100000 and rent < 150000")
-    db.xquery("UPDATE chair set rent_range = 3 WHERE rent >= 150000")
-
-    db.xquery("UPDATE chair set door_height_range = 0 WHERE door_height < 80")
-    db.xquery("UPDATE chair set door_height_range = 1 WHERE door_height >= 80 and rent < 110")
-    db.xquery("UPDATE chair set door_height_range = 2 WHERE door_height >= 110 and rent < 150")
-    db.xquery("UPDATE chair set door_height_range = 3 WHERE door_height >= 150")
-
-    db.xquery("UPDATE chair set door_width_range = 0 WHERE door_width < 80")
-    db.xquery("UPDATE chair set door_width_range = 1 WHERE door_width >= 80 and rent < 110")
-    db.xquery("UPDATE chair set door_width_range = 2 WHERE door_width >= 110 and rent < 150")
-    db.xquery("UPDATE chair set door_width_range = 3 WHERE door_width >= 150")
-
     { language: 'ruby' }.to_json
   end
 
@@ -360,21 +345,57 @@ class App < Sinatra::Base
     query_params = []
 
     if params[:doorHeightRangeId] && params[:doorHeightRangeId].size > 0
-      door_height_range = params[:doorHeightRangeId].to_i
-      search_queries << 'door_height_range = ?'
-      query_params << door_height_range
+      door_height = ESTATE_SEARCH_CONDITION[:doorHeight][:ranges][params[:doorHeightRangeId].to_i]
+      unless door_height
+        logger.error "doorHeightRangeId invalid: #{params[:doorHeightRangeId]}"
+        halt 400
+      end
+
+      if door_height[:min] != -1
+        search_queries << 'door_height >= ?'
+        query_params << door_height[:min]
+      end
+
+      if door_height[:max] != -1
+        search_queries << 'door_height < ?'
+        query_params << door_height[:max]
+      end
     end
 
     if params[:doorWidthRangeId] && params[:doorWidthRangeId].size > 0
-      door_width_range = params[:doorWidthRangeId].to_i
-      search_queries << 'door_width_range = ?'
-      query_params << door_width_range
+      door_width = ESTATE_SEARCH_CONDITION[:doorWidth][:ranges][params[:doorWidthRangeId].to_i]
+      unless door_width
+        logger.error "doorWidthRangeId invalid: #{params[:doorWidthRangeId]}"
+        halt 400
+      end
+
+      if door_width[:min] != -1
+        search_queries << 'door_width >= ?'
+        query_params << door_width[:min]
+      end
+
+      if door_width[:max] != -1
+        search_queries << 'door_width < ?'
+        query_params << door_width[:max]
+      end
     end
 
     if params[:rentRangeId] && params[:rentRangeId].size > 0
-      rent_range = params[:rentRangeId].to_i
-      search_queries << 'rent_range = ?'
-      query_params << rent_range
+      rent = ESTATE_SEARCH_CONDITION[:rent][:ranges][params[:rentRangeId].to_i]
+      unless rent
+        logger.error "rentRangeId invalid: #{params[:rentRangeId]}"
+        halt 400
+      end
+
+      if rent[:min] != -1
+        search_queries << 'rent >= ?'
+        query_params << rent[:min]
+      end
+
+      if rent[:max] != -1
+        search_queries << 'rent < ?'
+        query_params << rent[:max]
+      end
     end
 
     if params[:features] && params[:features].size > 0
