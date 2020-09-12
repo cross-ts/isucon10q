@@ -14,6 +14,7 @@ sudo cp ~/git/systemd/* /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl restart isuumo.ruby.service
 
+sudo cp ~/git/nginx/nginx.conf /etc/nginx/nginx.conf
 sudo cp ~/git/nginx/sites-available/isuumo.conf /etc/nginx/sites-available/isuumo.conf
 
 sudo nginx -t
