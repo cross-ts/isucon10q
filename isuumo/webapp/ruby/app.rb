@@ -50,7 +50,7 @@ class App < Sinatra::Base
     end
 
     def db
-      Thread.current[:db] ||=  Mysql2ClientWithNewRelic.new(
+      Thread.current[:db] ||=  Mysql2::Client.new(
         host: db_info[:host],
         port: db_info[:port],
         username: db_info[:username],
