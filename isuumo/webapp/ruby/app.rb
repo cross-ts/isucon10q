@@ -431,8 +431,8 @@ class App < Sinatra::Base
     limit_offset = " ORDER BY popularity DESC, id ASC LIMIT #{per_page} OFFSET #{per_page * page}" # XXX:
     count_prefix = 'SELECT COUNT(*) as count FROM estate WHERE '
 
-    count = db.xquery("#{count_prefix}#{search_condition}", query_params).first[:count]
     estates = db.xquery("#{sqlprefix}#{search_condition}#{limit_offset}", query_params).to_a
+    count = estates.size
 
     { count: count, estates: estates.map { |e| camelize_keys_for_estate(e) } }.to_json
   end
