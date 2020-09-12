@@ -1,0 +1,16 @@
+file: /var/log/nginx/access.log
+sort: sum
+reverse: true
+format: md
+output: count,1xx,2xx,3xx,4xx,5xx,method,uri,sum,avg,p50,p99,sum_body,avg_body
+matching_groups:
+# static files
+- '^/js/.*.js$'
+- '^/css/.*.css$'
+# summarize
+- '^/api/user/reservations/[0-9]+$'
+- '^/api/user/reservations/[0-9]+/cancel$'
+
+ltsv: {}
+json: {}
+regexp: {}
