@@ -142,6 +142,8 @@ class App < Sinatra::Base
     search_queries = []
     query_params = []
 
+    search_queries.push('stock > 0')
+
     if params[:priceRangeId] && params[:priceRangeId].size > 0
       chair_price = CHAIR_SEARCH_CONDITION[:price][:ranges][params[:priceRangeId].to_i]
       unless chair_price
@@ -235,8 +237,6 @@ class App < Sinatra::Base
       logger.error "Search condition not found"
       halt 400
     end
-
-    search_queries.push('stock > 0')
 
     page =
       begin
