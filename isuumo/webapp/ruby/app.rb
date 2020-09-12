@@ -4,6 +4,24 @@ require 'mysql2-cs-bind'
 require 'csv'
 require 'newrelic_rpm'
 
+class Mysql2ClientWithNewRelic < Mysql2::Client
+  def initialize(*args)
+    super
+  end
+
+  def query(sql, *args)
+    callback = -> (result, metrics, elapsed) do
+      NewRelic::Agent::Datastores.notice_sql(sql, metrics, elapsed)
+    end
+    op = sql[/^(select|insert|update|delete|begin|commit|rollback|truncate)
+/i] || 'other'
+    table = sql[/\bestate|chair\b/] || 'other'
+    NewRelic::Agent::Datastores.wrap('MySQL', op, table, callback) do
+      super
+    end
+  end
+end
+
 class App < Sinatra::Base
   LIMIT = 20
   NAZOTTE_LIMIT = 50
@@ -33,7 +51,7 @@ class App < Sinatra::Base
     end
 
     def db
-      Thread.current[:db] ||= Mysql2::Client.new(
+      Thread.current[:db] ||=  Mysql2ClientWithNewRelic.new(
         host: db_info[:host],
         port: db_info[:port],
         username: db_info[:username],

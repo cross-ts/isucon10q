@@ -26,7 +26,7 @@ sudo systemctl restart mysql
   source ~/git/env.sh
   export RACK_ENV=production
   # TODO: 対応する
-  mkdir ~/vendor || :
+  mkdir ~/vendor
   bundle check || bundle install --path ~/vendor/bundle --jobs 300
 ) || :
 
