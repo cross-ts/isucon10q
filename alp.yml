@@ -10,6 +10,8 @@ matching_groups:
 - '^.*.png'
 # summarize
 - '^/api/estate/[0-9]+$'
+- '^/api/estate/req_doc/[0-9]+$/'
+- '^/api/chair/[0-9]+$'
 
 ltsv: {}
 json: {}
