@@ -26,8 +26,8 @@ sudo systemctl restart mysql
   source ~/git/env.sh
   export RACK_ENV=production
   # TODO: 対応する
-  # export NEW_RELIC_LICENSE_KEY
-  # bundle exec newrelic deployment -r "$(git rev-parse HEAD)"
+  mkdir ~/vendor || :
+  bundle check || bundle install --path ~/vendor/bundle --jobs 300
 ) || :
 
 sudo bash -c 'cp /var/log/nginx/access.log /var/log/nginx/access.log.$(date +%s) && echo > /var/log/nginx/access.log; echo > /tmp/isu-query.log; echo > /tmp/isu-rack.log; echo > /tmp/isu-params.log; echo > /var/lib/mysql/mysql-slow.log; chown isucon:isucon /tmp/isu*.log'

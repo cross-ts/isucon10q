@@ -2,6 +2,7 @@ require 'sinatra'
 require 'mysql2'
 require 'mysql2-cs-bind'
 require 'csv'
+require 'newrelic_rpm'
 
 class App < Sinatra::Base
   LIMIT = 20
