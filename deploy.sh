@@ -17,7 +17,7 @@ sudo cp ~/git/nginx/sites-available/isuumo.conf /etc/nginx/sites-available/isuum
 sudo nginx -t
 sudo nginx -s reload || :
 
-sudo cp ~/git/mysql/conf.d/mysql.cnf /etc/mysql/conf.d/mysql.cnf
+sudo cp ~/git/mysql/conf.d/my.cnf /etc/mysql/conf.d/my.cnf
 sudo systemctl restart mysql
 
 (
