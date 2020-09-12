@@ -7,9 +7,9 @@ matching_groups:
 # static files
 - '^.*.js$'
 - '^.*.css$'
+- '^.*.png'
 # summarize
-- '^/api/user/reservations/[0-9]+$'
-- '^/api/user/reservations/[0-9]+/cancel$'
+- '^/api/estate/[0-9]+$'
 
 ltsv: {}
 json: {}
