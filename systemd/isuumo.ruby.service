@@ -2,8 +2,8 @@
 Description=isuumo.ruby
 
 [Service]
-WorkingDirectory=/home/isucon/isuumo/webapp/ruby
-EnvironmentFile=/home/isucon/env.sh
+WorkingDirectory=/home/isucon/git/isuumo/webapp/ruby
+EnvironmentFile=/home/isucon/git/env.sh
 PIDFile=/home/isucon/isuumo/webapp/ruby/server.pid
 
 User=isucon
