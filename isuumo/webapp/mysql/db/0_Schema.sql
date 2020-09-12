@@ -21,7 +21,7 @@ CREATE TABLE isuumo.estate
     INDEX search_1 (door_height, door_width, rent),
     INDEX search_2 (door_height, rent),
     INDEX search_3 (door_width, rent),
-    INDEX search_4 (rent),
+    INDEX search_4 (rent)
 );
 
 CREATE TABLE isuumo.chair
